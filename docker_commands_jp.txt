@@ -1,0 +1,64 @@
+
+# Dockerでよく使うコマンド
+
+## コンテナのライフサイクル管理
+
+- `docker run [オプション] [イメージ名] [コマンド]`: イメージから新しいコンテナを作成して実行します。
+  - `-d`: バックグラウンドで実行します（デタッチモード）。
+  - `-p [ホストのポート]:[コンテナのポート]`: ポートをマッピングします。
+  - `-v [ホストのパス]:[コンテナのパス]`: ボリュームをマウントします。
+  - `--name [コンテナ名]`: コンテナに名前を付けます。
+  - `it`: コンテナの標準入力を開いて、対話的に操作します。
+  - 例: `docker run -it -p 8080:80 --name my-web-server nginx`
+
+- `docker ps`: 現在実行中のコンテナの一覧を表示します。
+  - `docker ps -a`: 停止中のコンテナも含む、すべてのコンテナを表示します。
+
+- `docker stop [コンテナID or コンテナ名]`: 実行中のコンテナを停止します。
+
+- `docker start [コンテナID or コンテナ名]`: 停止しているコンテナを開始します。
+
+- `docker restart [コンテナID or コンテナ名]`: コンテナを再起動します。
+
+- `docker rm [コンテナID or コンテナ名]`: コンテナを削除します。
+  - `docker rm -f [コンテナID or コンテナ名]`: 実行中のコンテナを強制的に削除します。
+  - `docker container prune`: 停止中のコンテナを一括で削除します。
+
+- `docker exec -it [コンテナID or コンテナ名] [コマンド]`: 実行中のコンテナの内部でコマンドを実行します。
+  - 例: `docker exec -it my-web-server /bin/bash` (コンテナ内でbashを起動)
+
+## イメージ管理
+
+- `docker images`: ローカルに保存されているDockerイメージの一覧を表示します。
+
+- `docker build -t [イメージ名:タグ] [Dockerfileがあるディレクトリのパス]`: Dockerfileを元に新しいイメージをビルドします。
+  - 例: `docker build -t my-app:1.0 .` (カレントディレクトリのDockerfileでビルド)
+
+- `docker rmi [イメージID or イメージ名:タグ]`: ローカルのイメージを削除します。
+  - `docker image prune`: 未使用のイメージ（どのコンテナからも参照されていないイメージ）を一括で削除します。
+  - `docker image prune -a`: タグが付いていない未使用イメージも含む、すべての未使用イメージを削除します。
+
+- `docker pull [イメージ名:タグ]`: Docker Hubなどのレジストリからイメージを取得します。
+
+- `docker push [ユーザー名/イメージ名:タグ]`: 作成したイメージをDocker Hubなどのレジストリにプッシュします。
+
+## 情報の確認
+
+- `docker logs [コンテナID or コンテナ名]`: コンテナのログを表示します。
+  - `docker logs -f [コンテナID or コンテナ名]`: ログをリアルタイムで表示し続けます。
+
+- `docker inspect [コンテナID or イメージID]`: コンテナやイメージの詳細な情報をJSON形式で表示します。
+
+## Docker Compose (複数のコンテナ管理)
+
+- `docker-compose up`: `docker-compose.yml` ファイルを元に、すべてのサービス（コンテナ）を作成して起動します。
+  - `docker-compose up -d`: バックグラウンドで起動します。
+
+- `docker-compose down`: `docker-compose.yml` で定義されたコンテナ、ネットワーク、ボリュームを停止・削除します。
+
+- `docker-compose ps`: `docker-compose.yml` で管理されているコンテナの状態を表示します。
+
+- `docker-compose logs`: サービス（コンテナ）のログを表示します。
+
+- `docker-compose exec [サービス名] [コマンド]`: 指定したサービスのコンテナ内でコマンドを実行します。
+  - 例: `docker-compose exec web /bin/bash`
